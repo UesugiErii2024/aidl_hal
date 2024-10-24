@@ -1,0 +1,16 @@
+package {
+    // http://go/android-license-faq
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+android_app {
+    name: "Co2Sensor",
+    // sdk_version: "current",
+    platform_apis: true,
+    srcs: [
+        "src/**/*.java",
+    ],
+    static_libs: [
+        "android.hardware.co2sensor-V1-java"
+    ],
+}

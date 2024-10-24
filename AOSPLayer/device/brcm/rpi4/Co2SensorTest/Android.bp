@@ -1,0 +1,13 @@
+java_binary {
+    name: "Co2Sensor_aidl_Test",
+    srcs: [
+        "Co2SensorAidlTest.java",
+        "Co2SensorClient.java"
+    ],
+    static_libs: [
+        "android.hardware.co2sensor-V1-java",
+    ], 
+    platform_apis: true, 
+    installable: true, 
+    main_class: "Co2SensorAidlTest",
+}

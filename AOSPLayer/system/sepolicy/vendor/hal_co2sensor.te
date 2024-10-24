@@ -1,0 +1,52 @@
+# hal_attribute(co2sensor);
+
+# type hal_co2sensor_default, domain, mlstrustedsubject;
+# type hal_co2sensor_service, service_manager_type;
+# type hal_co2sensor_default_exec, exec_type, vendor_file_type, file_type;
+
+# hal_server_domain(hal_co2sensor_default, hal_co2sensor);
+# hal_client_domain(system_server, hal_co2sensor);
+# init_daemon_domain(hal_co2sensor_default);
+
+# binder_call(hal_co2sensor_client, hal_co2sensor_default);
+# add_service(hal_co2sensor_default, hal_co2sensor_service);
+# allow { hal_co2sensor_client untrusted_app } hal_co2sensor_service:service_manager find;
+
+
+# allow hal_co2sensor_default servicemanager:binder { call transfer };
+# allow { platform_app shell } hal_co2sensor:binder { call };
+# allow hal_co2sensor_default serial_device:chr_file { read write open };
+# # 允许 HAL 服务对 vndbinder 设备执行所有必要的操作
+# allow hal_co2sensor_default vndbinder_device:chr_file { read write open ioctl map };
+# allow shell hal_co2sensor_default_exec:file { getattr };
+
+
+
+hal_attribute(co2sensor);
+type hal_co2sensor_default, domain, mlstrustedsubject;
+hal_server_domain(hal_co2sensor_default, hal_co2sensor);
+type hal_co2sensor_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_co2sensor_default);
+
+#Allow hwbinder call form hal client to server
+binder_call(hal_co2sensor_client, hal_co2sensor_default_exec)
+
+#add hwservice related rules
+type hal_co2sensor_service, service_manager_type;
+type hal_co2sensor_hwservice, hwservice_manager_type, protected_hwservice;
+get_prop(hal_co2sensor, hwservicemanager_prop)
+add_service(hal_co2sensor_default, hal_co2sensor_service)
+add_hwservice(hal_co2sensor_server, hal_co2sensor_hwservice)
+allow hal_co2sensor_client hal_co2sensor_hwservice:hwservice_manager find;
+hal_client_domain(system_server, hal_co2sensor)
+hwbinder_use(hal_co2sensor);
+
+allow hal_co2sensor_default servicemanager:binder { call transfer };
+allow {  platform_app shell } hal_co2sensor_hwservice:hwservice_manager { find };
+allow {  platform_app shell } hal_co2sensor:binder {call};
+
+allow hal_co2sensor_default vndbinder_device:chr_file { read write open ioctl map };
+
+
+allow untrusted_app hal_co2sensor_service:service_manager find;
+allow untrusted_app hal_co2sensor_default:binder { call transfer };

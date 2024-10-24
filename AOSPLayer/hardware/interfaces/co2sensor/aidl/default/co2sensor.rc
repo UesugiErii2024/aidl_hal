@@ -1,0 +1,6 @@
+# co2sensor.rc
+service android.hardware.co2sensor-service /vendor/bin/hw/android.hardware.co2sensor-service
+    interface aidl android.hardware.co2sensor.ICo2Sensor/default 
+    class hal                             
+    user system                
+    group system

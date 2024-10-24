@@ -1,0 +1,31 @@
+cc_defaults {
+    name: "co2sensor_service_defaults",
+    vendor: true,
+    relative_install_path: "hw",
+    shared_libs: [
+        "liblog",
+        "libbase",
+        "libdl",
+        "libutils",
+        "libbinder",
+        "libbinder_ndk",
+        "libhardware",
+        "libhidlbase",
+        "android.hardware.co2sensor-V1-ndk",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.co2sensor-service",
+    defaults: ["co2sensor_service_defaults"],
+    vintf_fragments: ["co2sensor.xml"],
+    init_rc: ["co2sensor.rc"], 
+    srcs: [
+        "Co2SensorServiceMain.cpp",
+        "Co2Sensors.cpp",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ]
+}
